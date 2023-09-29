@@ -41,7 +41,7 @@ public class LibraryController {
                 isbn, additionDate, plot,numberOfFullReads, owner_id);
     }
 
-    @PostMapping("/removeBook/{bookId}")
+    @PutMapping("/removeBook/{bookId}")
     public Boolean removeBook(@PathVariable("bookId") Integer bookId) {
         return this.service.removeBook(bookId);
     }
