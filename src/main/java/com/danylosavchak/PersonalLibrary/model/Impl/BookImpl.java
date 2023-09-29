@@ -11,30 +11,32 @@ public class BookImpl implements Book {
 
     private final Integer book_id;
     private String title;
-    private Person author;
+    private Integer author_id;
     private String isbn;
     private Date additionDate;
     private Optional<Date> removalDate;
     private String plot;
     private Integer numberOfFullReads;
-    private final Userr owner;
+    private final Integer owner_id;
 
     public BookImpl(Integer book_id,
                     String title,
-                    Person author,
+                    Integer author_id,
                     String isbn,
                     Date additionDate,
+                    Date removalDate,
                     String plot,
                     Integer numberOfFullReads,
-                    Userr owner) {
+                    Integer owner_id) {
         this.book_id = book_id;
         this.title = title;
-        this.author = author;
+        this.author_id = author_id;
         this.isbn = isbn;
         this.additionDate = additionDate;
+        this.removalDate = Optional.ofNullable(removalDate);
         this.plot = plot;
         this.numberOfFullReads = numberOfFullReads;
-        this.owner = owner;
+        this.owner_id = owner_id;
     }
 
 
@@ -54,13 +56,13 @@ public class BookImpl implements Book {
     }
 
     @Override
-    public Person getAuthor() {
-        return this.author;
+    public Integer getAuthorId() {
+        return this.author_id;
     }
 
     @Override
-    public void setAuthor(Person author) {
-        this.author = author;
+    public void setAuthorId(Integer author_id) {
+        this.author_id = author_id;
     }
 
     @Override
@@ -114,7 +116,7 @@ public class BookImpl implements Book {
     }
 
     @Override
-    public Userr getOwner() {
-        return this.owner;
+    public Integer getOwnerId() {
+        return this.owner_id;
     }
 }

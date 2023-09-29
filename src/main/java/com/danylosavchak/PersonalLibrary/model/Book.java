@@ -10,9 +10,9 @@ public interface Book {
 
     void setTitle(String title);
 
-    Person getAuthor();
+    Integer getAuthorId();
 
-    void setAuthor(Person author);
+    void setAuthorId(Integer author_id);
 
     String getISBN();
 
@@ -34,5 +34,5 @@ public interface Book {
 
     void setNumberOfFullReads(Integer numberOfFullReads);
 
-    Userr getOwner();
+    Integer getOwnerId();
 }
