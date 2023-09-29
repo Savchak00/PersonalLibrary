@@ -36,7 +36,7 @@ public class DaoImpl implements Dao {
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.execute();
             ResultSet resultSet = stmt.getResultSet();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
 
                 Integer book_id = resultSet.getInt("book_id");
                 String title = resultSet.getString("title");
@@ -87,6 +87,7 @@ public class DaoImpl implements Dao {
         return userId;
     }
 
+    @Override
     public Optional<Integer> getPersonId(String firstName, String lastName) {
         String query = "SELECT person_id FROM person WHERE first_name = ? AND last_name = ?;";
         Optional<Integer> personId = Optional.empty();
@@ -105,6 +106,7 @@ public class DaoImpl implements Dao {
         return personId;
     }
 
+    @Override
     public Boolean createUser(Integer personId, String email) {
         String query = "INSERT INTO userr(user_id, person_id, email)\n" +
                 "VALUES ( (SELECT MAX(user_id) + 1 FROM userr), ?, ? );";
@@ -120,6 +122,7 @@ public class DaoImpl implements Dao {
         return  rowsCount > 0;
     }
 
+    @Override
     public Boolean createPerson(String first_name, String last_name) {
         String query = "INSERT INTO person(person_id, first_name, last_name) VALUES ( (SELECT MAX(person_id) + 1 FROM person), ?, ? );";
         int rowsCount = 0;
@@ -134,6 +137,30 @@ public class DaoImpl implements Dao {
         return  rowsCount > 0;
     }
 
+
+    @Override
+    public Boolean addBook(String title, Integer authorId, String isbn, Date additionDate, String plot, Integer numberOfFullReads, Integer owner_id) {
+        String query = "INSERT INTO book(book_id, title, author_id, isbn, date_of_addition, date_of_removal, plot, num_of_full_reads, owner_id)\n" +
+                "VALUES ((SELECT MAX(book_id) + 1 FROM book), ?, ?, ?, ?, ?, ?, ?, ?);";
+        int rowsCount = 0;
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, title);
+            stmt.setInt(2, authorId);
+            stmt.setString(3, isbn);
+            stmt.setDate(4, additionDate);
+            stmt.setDate(5, null);
+            stmt.setString(6, plot);
+            stmt.setInt(7, numberOfFullReads);
+            stmt.setInt(8, owner_id);
+            rowsCount = stmt.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "DaoImpl.addBook " + e.getMessage());
+        }
+        return rowsCount > 0;
+    }
+
+    @Override
     public Optional<Integer> getUserId(Integer personId, String email) {
         String query = "SELECT user_id FROM userr WHERE person_id = ? AND email = ?;";
         Optional<Integer> userId = Optional.empty();

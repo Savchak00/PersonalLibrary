@@ -2,6 +2,7 @@ package com.danylosavchak.PersonalLibrary.dao;
 
 import com.danylosavchak.PersonalLibrary.model.Book;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,4 +19,9 @@ public interface Dao {
     Optional<Integer> getUserId(Integer integer, String email);
 
     Boolean createPerson(String firstName, String lastName);
+
+    Boolean addBook(String title, Integer authorId, String isbn,
+                    Date additionDate, String plot,
+                    Integer numberOfFullReads, Integer owner_id);
+
 }
