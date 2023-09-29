@@ -12,4 +12,6 @@ public interface LibraryService {
     Boolean addBook(String title, String authorFirstName, String authorLastName,
                     String isbn, Date additionDate, String plot,
                     Integer numberOfFullReads, Integer owner_id);
+
+    Boolean removeBook(Integer bookId);
 }

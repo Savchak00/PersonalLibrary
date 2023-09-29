@@ -30,7 +30,7 @@ public class DaoImpl implements Dao {
 
     @Override
     public List<Book> getLibrary(Integer user_id) {
-        String query = "SELECT * FROM book WHERE owner_id = " + user_id + ";";
+        String query = "SELECT * FROM book WHERE owner_id = " + user_id + " AND date_of_removal IS NULL;";
         List<Book> library = new ArrayList<>();
         try {
             PreparedStatement stmt = connection.prepareStatement(query);
@@ -156,6 +156,20 @@ public class DaoImpl implements Dao {
             rowsCount = stmt.executeUpdate();
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "DaoImpl.addBook " + e.getMessage());
+        }
+        return rowsCount > 0;
+    }
+
+    @Override
+    public Boolean removeBook(Integer bookId) {
+        String query = "UPDATE book SET date_of_removal = cast(now() as date) WHERE book_id = ?;";
+        int rowsCount = 0;
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, bookId);
+            rowsCount = stmt.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "DaoImpl.removeBook " + e.getMessage());
         }
         return rowsCount > 0;
     }

@@ -40,4 +40,9 @@ public class LibraryController {
         return this.service.addBook(title, authorFirstName, authorLastName,
                 isbn, additionDate, plot,numberOfFullReads, owner_id);
     }
+
+    @PostMapping("/removeBook/{bookId}")
+    public Boolean removeBook(@PathVariable("bookId") Integer bookId) {
+        return this.service.removeBook(bookId);
+    }
 }

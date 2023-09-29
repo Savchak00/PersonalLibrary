@@ -24,4 +24,6 @@ public interface Dao {
                     Date additionDate, String plot,
                     Integer numberOfFullReads, Integer owner_id);
 
+    Boolean removeBook(Integer bookId);
+
 }

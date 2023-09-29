@@ -37,4 +37,9 @@ public class LibraryServiceImpl implements LibraryService {
         return this.addBook(title, authorFirstName, authorLastName,
                     isbn, additionDate, plot,numberOfFullReads, owner_id);
     }
+
+    @Override
+    public Boolean removeBook(Integer bookId) {
+        return this.dao.removeBook(bookId);
+    }
 }
