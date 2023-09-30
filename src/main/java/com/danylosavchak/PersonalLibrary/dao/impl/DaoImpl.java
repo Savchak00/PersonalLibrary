@@ -173,6 +173,28 @@ public class DaoImpl implements Dao {
         return book;
     }
 
+    @Override
+    public Boolean editBook(Integer bookId, String title, Integer authorId, String isbn,
+                         String plot, Integer numberOfFullReads) {
+        String query = "UPDATE book \n" +
+                "SET title = ?, isbn = ?, plot = ?, num_of_full_reads = ?, author_id = ? \n" +
+                "WHERE book_id = ?;";
+        int rowsCount = 0;
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, title);
+            stmt.setString(2, isbn);
+            stmt.setString(3,plot);
+            stmt.setInt(4,numberOfFullReads);
+            stmt.setInt(5, authorId);
+            stmt.setInt(6, bookId);
+            rowsCount = stmt.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "DaoImpl.editBook " + e.getMessage());
+        }
+        return rowsCount > 0;
+    }
+
     private Book formABook(ResultSet resultSet) throws SQLException {
         Integer book_id = resultSet.getInt("book_id");
         String title = resultSet.getString("title");

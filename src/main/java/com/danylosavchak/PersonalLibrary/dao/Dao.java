@@ -28,4 +28,7 @@ public interface Dao {
 
     Optional<Book> getBook(Integer bookId);
 
+    Boolean editBook(Integer bookId, String title, Integer authorId,
+    String isbn, String plot, Integer numberOfFullReads);
+
 }
