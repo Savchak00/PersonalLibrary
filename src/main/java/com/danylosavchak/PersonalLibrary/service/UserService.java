@@ -8,5 +8,5 @@ public interface UserService {
 
     Optional<Integer> logIn(Userr user);
 
-    Integer register(Userr user);
+    Optional<Integer> register(Userr user);
 }

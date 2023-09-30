@@ -12,7 +12,7 @@ public class UserrImpl extends PersonImpl implements Userr {
     private String email;
 
     public UserrImpl(Person person, String email, Integer userId) {
-        super(person.getPersonId(), person.getFirstName(), person.getLastName());
+        super(person.getPersonId().get(), person.getFirstName(), person.getLastName());
         this.email = email;
         this.userId = userId;
     }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController("bookController")
 @RequestMapping("api/book")
@@ -25,11 +26,11 @@ public class BookController {
 
     @GetMapping("{bookId}")
     public ResponseEntity<Object> getBook(@PathVariable("bookId") Integer bookId) {
-        Book book =  this.service.getBook(bookId);
+        Optional<Book> bookOptional =  this.service.getBook(bookId);
         Map<String, Book> responseMap = new HashMap<>();
         responseMap.put("book", null);
-        if (book != null) {
-            responseMap.put("book", book);
+        if (bookOptional.isPresent()) {
+            responseMap.put("book", bookOptional.get());
             return ResponseHandler.responseBuilder("Book is returned.", HttpStatus.OK, responseMap);
         }
         return ResponseHandler.responseBuilder("Book is not returned.",

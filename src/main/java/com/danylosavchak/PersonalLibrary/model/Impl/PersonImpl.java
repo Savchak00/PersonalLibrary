@@ -3,17 +3,19 @@ package com.danylosavchak.PersonalLibrary.model.Impl;
 import com.danylosavchak.PersonalLibrary.model.Person;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Optional;
+
 public class PersonImpl implements Person {
 
     @JsonProperty("personId")
-    private Integer personId;
+    private Optional<Integer> personId;
     @JsonProperty("firstName")
     private String firstName;
     @JsonProperty("lastName")
     private String lastName;
 
     public PersonImpl(Integer personId, String firstName, String lastName) {
-        this.personId = personId;
+        this.personId = Optional.ofNullable(personId);
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -23,17 +25,17 @@ public class PersonImpl implements Person {
     }
 
     public PersonImpl() {
-
+        this(null,null,null);
     }
 
     @Override
-    public Integer getPersonId() {
+    public Optional<Integer> getPersonId() {
         return personId;
     }
 
     @Override
-    public void setPersonId(Integer personId) {
-        if (this.personId == null) {
+    public void setPersonId(Optional<Integer> personId) {
+        if (!this.personId.isPresent()) {
             this.personId = personId;
         }
     }

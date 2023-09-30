@@ -34,7 +34,7 @@ public class LogInController {
             responseMap.put("userId", userId.get());
             return ResponseHandler.responseBuilder("User is logged in.", HttpStatus.OK, responseMap);
         } else {
-            userId = Optional.ofNullable(this.service.register(user));
+            userId = this.service.register(user);
             if (userId.isPresent()) {
                 responseMap.put("userId", userId.get());
                 return ResponseHandler.responseBuilder(

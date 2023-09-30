@@ -25,9 +25,9 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public Boolean addBook(Book book) {
         book.getAuthor().setPersonId(
-                this.dao.getPersonId(book.getAuthor().getFirstName().toLowerCase(), book.getAuthor().getLastName().toLowerCase()).orElse(null));
+                this.dao.getPersonId(book.getAuthor().getFirstName().toLowerCase(), book.getAuthor().getLastName().toLowerCase()));
 
-        if (book.getAuthor().getPersonId() != null) {
+        if (book.getAuthor().getPersonId().isPresent()) {
             return this.dao.addBook(book);
         }
         this.dao.createPerson(book.getAuthor().getFirstName().toLowerCase(), book.getAuthor().getLastName().toLowerCase());

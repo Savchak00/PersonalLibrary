@@ -5,8 +5,6 @@ import com.danylosavchak.PersonalLibrary.model.Book;
 import com.danylosavchak.PersonalLibrary.model.Impl.BookImpl;
 import com.danylosavchak.PersonalLibrary.model.Impl.PersonImpl;
 import com.danylosavchak.PersonalLibrary.model.Impl.UserrImpl;
-import com.danylosavchak.PersonalLibrary.model.Person;
-import com.danylosavchak.PersonalLibrary.model.Userr;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -25,8 +23,7 @@ public class DaoImpl implements Dao {
     public DaoImpl() {
         try {
             Class.forName("org.postgresql.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hastega");
-            this.connection = connection;
+            this.connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hastega");
         } catch (Exception e) {
             System.out.println("There is an error during connection to database: " + e);
         }
@@ -140,7 +137,7 @@ public class DaoImpl implements Dao {
         try {
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, book.getTitle());
-            stmt.setInt(2, book.getAuthor().getPersonId());
+            stmt.setInt(2, book.getAuthor().getPersonId().get());
             stmt.setString(3, book.getISBN());
             stmt.setDate(4, book.getAdditionDate());
             stmt.setDate(5, null);
@@ -206,7 +203,7 @@ public class DaoImpl implements Dao {
             stmt.setString(2, book.getISBN());
             stmt.setString(3, book.getPlot());
             stmt.setInt(4, book.getNumberOfFullReads());
-            stmt.setInt(5, book.getAuthor().getPersonId());
+            stmt.setInt(5, book.getAuthor().getPersonId().get());
             stmt.setInt(6, book.getBookId());
             rowsCount = stmt.executeUpdate();
         } catch (SQLException e) {

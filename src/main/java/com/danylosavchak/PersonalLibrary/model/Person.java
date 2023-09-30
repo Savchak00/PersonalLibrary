@@ -1,10 +1,12 @@
 package com.danylosavchak.PersonalLibrary.model;
 
+import java.util.Optional;
+
 public interface Person {
 
-    Integer getPersonId();
+    Optional<Integer> getPersonId();
 
-    void setPersonId(Integer personId);
+    void setPersonId(Optional<Integer> personId);
 
     String getFirstName();
 

@@ -23,13 +23,13 @@ public class UserServiceImpl implements UserService {
                 user.getEmail().toLowerCase());
     }
 
-    public Integer register(Userr user) {
+    public Optional<Integer> register(Userr user) {
         user.setPersonId(this.dao.getPersonId(user.getFirstName().toLowerCase(),
-                user.getLastName().toLowerCase()).orElse(null));
-        if (user.getPersonId() != null) {
-            Boolean userCreated = this.dao.createUser(user.getPersonId(), user.getEmail());
+                user.getLastName().toLowerCase()));
+        if (user.getPersonId().isPresent()) {
+            Boolean userCreated = this.dao.createUser(user.getPersonId().get(), user.getEmail());
             if (userCreated) {
-                return this.dao.getUserId(user.getPersonId(), user.getEmail() ).orElse(-100);
+                return this.dao.getUserId(user.getPersonId().get(), user.getEmail());
             }
         }
         this.dao.createPerson(user.getFirstName().toLowerCase(), user.getLastName().toLowerCase());

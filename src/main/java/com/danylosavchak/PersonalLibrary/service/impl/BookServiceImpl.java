@@ -6,6 +6,8 @@ import com.danylosavchak.PersonalLibrary.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service("bookService")
 public class BookServiceImpl implements BookService {
 
@@ -17,14 +19,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book getBook(Integer bookId) {
-        return this.dao.getBook(bookId).orElse(null);
+    public Optional<Book> getBook(Integer bookId) {
+        return this.dao.getBook(bookId);
     }
 
     @Override
     public Boolean editBook(Book book) {
-        book.getAuthor().setPersonId(this.dao.getPersonId(book.getAuthor().getFirstName().toLowerCase(), book.getAuthor().getLastName().toLowerCase()).orElse(null));
-        if (book.getAuthor().getPersonId() != null) {
+        book.getAuthor().setPersonId(this.dao.getPersonId(book.getAuthor().getFirstName().toLowerCase(), book.getAuthor().getLastName().toLowerCase()));
+        if (book.getAuthor().getPersonId().isPresent()) {
             return this.dao.editBook(book);
         }
         this.dao.createPerson(book.getAuthor().getFirstName(), book.getAuthor().getLastName());
