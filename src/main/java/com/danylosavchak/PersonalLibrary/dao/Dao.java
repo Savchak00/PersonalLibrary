@@ -26,4 +26,6 @@ public interface Dao {
 
     Boolean removeBook(Integer bookId);
 
+    Optional<Book> getBook(Integer bookId);
+
 }

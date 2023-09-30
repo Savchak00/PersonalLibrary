@@ -37,26 +37,7 @@ public class DaoImpl implements Dao {
             stmt.execute();
             ResultSet resultSet = stmt.getResultSet();
             while (resultSet.next()) {
-
-                Integer book_id = resultSet.getInt("book_id");
-                String title = resultSet.getString("title");
-                Integer author_id = resultSet.getInt("author_id");
-                String isbn = resultSet.getString("isbn");
-                Date additionDate = resultSet.getDate("date_of_addition");
-                Date removalDate = resultSet.getDate("date_of_removal");
-                String plot = resultSet.getString("plot");
-                Integer numberOfFullReads = resultSet.getInt("num_of_full_reads");
-                Integer owner_id = resultSet.getInt("owner_id");
-
-                Book book = new BookImpl(book_id,
-                        title,
-                        author_id,
-                        isbn,
-                        additionDate,
-                        removalDate,
-                        plot,
-                        numberOfFullReads,
-                        owner_id);
+                Book book = this.formABook(resultSet);
                 library.add(book);
             }
             stmt.close();
@@ -172,6 +153,47 @@ public class DaoImpl implements Dao {
             LOGGER.log(Level.SEVERE, "DaoImpl.removeBook " + e.getMessage());
         }
         return rowsCount > 0;
+    }
+
+    @Override
+    public Optional<Book> getBook(Integer bookId) {
+        String query = "SELECT * FROM book WHERE book_id = ?;";
+        Optional<Book> book = Optional.empty();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, bookId);
+            stmt.execute();
+            ResultSet resultSet = stmt.getResultSet();
+            if (resultSet.next()) {
+                book = Optional.of(this.formABook(resultSet));
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "DaoImpl.getBook " + e.getMessage());
+        }
+        return book;
+    }
+
+    private Book formABook(ResultSet resultSet) throws SQLException {
+        Integer book_id = resultSet.getInt("book_id");
+        String title = resultSet.getString("title");
+        Integer author_id = resultSet.getInt("author_id");
+        String isbn = resultSet.getString("isbn");
+        Date additionDate = resultSet.getDate("date_of_addition");
+        Date removalDate = resultSet.getDate("date_of_removal");
+        String plot = resultSet.getString("plot");
+        Integer numberOfFullReads = resultSet.getInt("num_of_full_reads");
+        Integer owner_id = resultSet.getInt("owner_id");
+
+        Book book = new BookImpl(book_id,
+                title,
+                author_id,
+                isbn,
+                additionDate,
+                removalDate,
+                plot,
+                numberOfFullReads,
+                owner_id);
+        return book;
     }
 
     @Override

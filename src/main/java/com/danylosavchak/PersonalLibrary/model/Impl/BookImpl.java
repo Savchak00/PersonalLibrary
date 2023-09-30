@@ -1,8 +1,6 @@
 package com.danylosavchak.PersonalLibrary.model.Impl;
 
 import com.danylosavchak.PersonalLibrary.model.Book;
-import com.danylosavchak.PersonalLibrary.model.Person;
-import com.danylosavchak.PersonalLibrary.model.Userr;
 
 import java.sql.Date;
 import java.util.Optional;
