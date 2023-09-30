@@ -1,6 +1,7 @@
 package com.danylosavchak.PersonalLibrary.service.impl;
 
 import com.danylosavchak.PersonalLibrary.dao.Dao;
+import com.danylosavchak.PersonalLibrary.model.Userr;
 import com.danylosavchak.PersonalLibrary.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,19 +18,21 @@ public class UserServiceImpl implements UserService {
         this.dao = dao;
     }
 
-    public Optional<Integer> logIn(String firstName, String lastName, String email) {
-        return this.dao.logIn(firstName, lastName, email);
+    public Optional<Integer> logIn(Userr user) {
+        return this.dao.logIn(user.getFirstName().toLowerCase(), user.getLastName().toLowerCase(),
+                user.getEmail().toLowerCase());
     }
 
-    public Integer register(String firstName, String lastName, String email) {
-        Optional<Integer> personId = this.dao.getPersonId(firstName, lastName);
-        if (personId.isPresent()) {
-            Boolean userCreated = this.dao.createUser(personId.get(), email);
+    public Integer register(Userr user) {
+        user.setPersonId(this.dao.getPersonId(user.getFirstName().toLowerCase(),
+                user.getLastName().toLowerCase()).orElse(null));
+        if (user.getPersonId() != null) {
+            Boolean userCreated = this.dao.createUser(user.getPersonId(), user.getEmail());
             if (userCreated) {
-                return this.dao.getUserId(personId.get(), email).orElse(-100);
+                return this.dao.getUserId(user.getPersonId(), user.getEmail() ).orElse(-100);
             }
         }
-        this.dao.createPerson(firstName, lastName);
-        return this.register(firstName, lastName, email);
+        this.dao.createPerson(user.getFirstName().toLowerCase(), user.getLastName().toLowerCase());
+        return this.register(user);
     }
 }

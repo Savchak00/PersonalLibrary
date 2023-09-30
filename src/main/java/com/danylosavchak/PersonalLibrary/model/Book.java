@@ -1,5 +1,7 @@
 package com.danylosavchak.PersonalLibrary.model;
 
+import com.danylosavchak.PersonalLibrary.model.Impl.PersonImpl;
+
 import java.sql.Date;
 
 public interface Book {
@@ -10,9 +12,9 @@ public interface Book {
 
     void setTitle(String title);
 
-    Integer getAuthorId();
+    Person getAuthor();
 
-    void setAuthorId(Integer author_id);
+    void setAuthor(PersonImpl author);
 
     String getISBN();
 
@@ -34,5 +36,5 @@ public interface Book {
 
     void setNumberOfFullReads(Integer numberOfFullReads);
 
-    Integer getOwnerId();
+    Userr getOwner();
 }

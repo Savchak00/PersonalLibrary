@@ -6,9 +6,7 @@ import com.danylosavchak.PersonalLibrary.service.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service("libraryService")
 public class LibraryServiceImpl implements LibraryService {
@@ -25,17 +23,15 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public Boolean addBook(String title, String authorFirstName, String authorLastName, String isbn,
-                           Date additionDate, String plot,
-                           Integer numberOfFullReads, Integer owner_id) {
-        Optional<Integer> authorId = this.dao.getPersonId(authorFirstName, authorLastName);
-        if (authorId.isPresent()) {
-            return this.dao.addBook(title, authorId.get(), isbn,
-                    additionDate, plot, numberOfFullReads, owner_id);
+    public Boolean addBook(Book book) {
+        book.getAuthor().setPersonId(
+                this.dao.getPersonId(book.getAuthor().getFirstName().toLowerCase(), book.getAuthor().getLastName().toLowerCase()).orElse(null));
+
+        if (book.getAuthor().getPersonId() != null) {
+            return this.dao.addBook(book);
         }
-        this.dao.createPerson(authorFirstName, authorLastName);
-        return this.addBook(title, authorFirstName, authorLastName,
-                    isbn, additionDate, plot,numberOfFullReads, owner_id);
+        this.dao.createPerson(book.getAuthor().getFirstName().toLowerCase(), book.getAuthor().getLastName().toLowerCase());
+        return this.addBook(book);
     }
 
     @Override

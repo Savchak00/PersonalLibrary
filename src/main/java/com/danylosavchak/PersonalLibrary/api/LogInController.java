@@ -1,5 +1,6 @@
 package com.danylosavchak.PersonalLibrary.api;
 
+import com.danylosavchak.PersonalLibrary.model.Impl.UserrImpl;
 import com.danylosavchak.PersonalLibrary.response.ResponseHandler;
 import com.danylosavchak.PersonalLibrary.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,17 +27,14 @@ public class LogInController {
     }
 
     @PostMapping("/logInOrCreate")
-    public ResponseEntity<Object> logInOrCreate(@RequestBody Map<String, String> json) {
-        String firstName = json.get("firstName").toLowerCase();
-        String lastName = json.get("lastName").toLowerCase();
-        String email = json.get("email").toLowerCase();
-        Optional<Integer> userId = this.service.logIn(firstName, lastName, email);
+    public ResponseEntity<Object> logInOrCreate(@RequestBody UserrImpl user) {
+        Optional<Integer> userId = this.service.logIn(user);
         Map<String, Integer> responseMap = new HashMap<>();
         if (userId.isPresent()) {
             responseMap.put("userId", userId.get());
             return ResponseHandler.responseBuilder("User is logged in.", HttpStatus.OK, responseMap);
         } else {
-            userId = Optional.ofNullable(this.service.register(firstName, lastName, email));
+            userId = Optional.ofNullable(this.service.register(user));
             if (userId.isPresent()) {
                 responseMap.put("userId", userId.get());
                 return ResponseHandler.responseBuilder(

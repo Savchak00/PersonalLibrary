@@ -1,6 +1,7 @@
 package com.danylosavchak.PersonalLibrary.api;
 
 import com.danylosavchak.PersonalLibrary.model.Book;
+import com.danylosavchak.PersonalLibrary.model.Impl.BookImpl;
 import com.danylosavchak.PersonalLibrary.response.ResponseHandler;
 import com.danylosavchak.PersonalLibrary.service.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,17 +34,8 @@ public class LibraryController {
     }
 
     @PostMapping("/addBook")
-    public ResponseEntity<Object> addBook(@RequestBody Map<String, String> json) {
-        String title = json.get("title");
-        String authorFirstName = json.get("authorFirstName");
-        String authorLastName = json.get("authorLastName");
-        String isbn = json.get("isbn");
-        Date additionDate = Date.valueOf(LocalDate.parse(json.get("additionDate")));
-        String plot = json.get("plot");
-        Integer numberOfFullReads = new Integer(json.get("numberOfFullReads"));
-        Integer owner_id = new Integer(json.get("userId"));
-        Boolean isBookAdded = this.service.addBook(title, authorFirstName, authorLastName,
-                isbn, additionDate, plot,numberOfFullReads, owner_id);
+    public ResponseEntity<Object> addBook(@RequestBody BookImpl book) {
+        Boolean isBookAdded = this.service.addBook(book);
         Map<String, Boolean> responseMap = new HashMap<>();
         responseMap.put("isBookAdded", isBookAdded);
         if (isBookAdded) {

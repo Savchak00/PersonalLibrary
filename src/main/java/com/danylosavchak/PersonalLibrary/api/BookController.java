@@ -1,6 +1,7 @@
 package com.danylosavchak.PersonalLibrary.api;
 
 import com.danylosavchak.PersonalLibrary.model.Book;
+import com.danylosavchak.PersonalLibrary.model.Impl.BookImpl;
 import com.danylosavchak.PersonalLibrary.response.ResponseHandler;
 import com.danylosavchak.PersonalLibrary.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,16 +37,8 @@ public class BookController {
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<Object> editBook(@RequestBody Map<String, String> json) {
-        Integer bookId = new Integer(json.get("bookId"));
-        String title = json.get("title");
-        String authorFirstName = json.get("authorFirstName").toLowerCase();
-        String authorLastName = json.get("authorLastName").toLowerCase();
-        String isbn = json.get("isbn");
-        String plot = json.get("plot");
-        Integer numberOfFullReads = new Integer(json.get("numberOfFullReads"));
-        Boolean isBookEdited =  this.service.editBook(bookId, title, authorFirstName, authorLastName, isbn, plot,
-                numberOfFullReads);
+    public ResponseEntity<Object> editBook(@RequestBody BookImpl book) {
+        Boolean isBookEdited =  this.service.editBook(book);
         Map<String, Boolean> responseMap = new HashMap<>();
         responseMap.put("isBookEdited", false);
         if (isBookEdited) {

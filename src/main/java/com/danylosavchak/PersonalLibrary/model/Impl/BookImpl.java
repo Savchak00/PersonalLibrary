@@ -1,46 +1,60 @@
 package com.danylosavchak.PersonalLibrary.model.Impl;
 
 import com.danylosavchak.PersonalLibrary.model.Book;
+import com.danylosavchak.PersonalLibrary.model.Person;
+import com.danylosavchak.PersonalLibrary.model.Userr;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.sql.Date;
 import java.util.Optional;
 
 public class BookImpl implements Book {
 
-    private final Integer book_id;
+    @JsonProperty("bookId")
+    private Integer bookId;
+    @JsonProperty("title")
     private String title;
-    private Integer author_id;
+    @JsonProperty("author")
+    private PersonImpl author;
+    @JsonProperty("isbn")
     private String isbn;
+    @JsonProperty("additionDate")
     private Date additionDate;
+    @JsonProperty("removalDate")
     private Optional<Date> removalDate;
+    @JsonProperty("plot")
     private String plot;
+    @JsonProperty("numberOfFullReads")
     private Integer numberOfFullReads;
-    private final Integer owner_id;
+    @JsonProperty("owner")
+    private UserrImpl owner;
 
-    public BookImpl(Integer book_id,
+    public BookImpl(Integer bookId,
                     String title,
-                    Integer author_id,
+                    PersonImpl author,
                     String isbn,
                     Date additionDate,
                     Date removalDate,
                     String plot,
                     Integer numberOfFullReads,
-                    Integer owner_id) {
-        this.book_id = book_id;
+                    UserrImpl owner) {
+        this.bookId = bookId;
         this.title = title;
-        this.author_id = author_id;
+        this.author = author;
         this.isbn = isbn;
         this.additionDate = additionDate;
         this.removalDate = Optional.ofNullable(removalDate);
         this.plot = plot;
         this.numberOfFullReads = numberOfFullReads;
-        this.owner_id = owner_id;
+        this.owner = owner;
     }
+
+    public BookImpl() {};
 
 
     @Override
     public Integer getBookId() {
-        return this.book_id;
+        return this.bookId;
     }
 
     @Override
@@ -54,13 +68,13 @@ public class BookImpl implements Book {
     }
 
     @Override
-    public Integer getAuthorId() {
-        return this.author_id;
+    public Person getAuthor() {
+        return this.author;
     }
 
     @Override
-    public void setAuthorId(Integer author_id) {
-        this.author_id = author_id;
+    public void setAuthor(PersonImpl author) {
+        this.author = author;
     }
 
     @Override
@@ -114,7 +128,7 @@ public class BookImpl implements Book {
     }
 
     @Override
-    public Integer getOwnerId() {
-        return this.owner_id;
+    public Userr getOwner() {
+        return this.owner;
     }
 }

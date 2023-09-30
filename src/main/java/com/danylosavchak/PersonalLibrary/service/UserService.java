@@ -1,10 +1,12 @@
 package com.danylosavchak.PersonalLibrary.service;
 
+import com.danylosavchak.PersonalLibrary.model.Userr;
+
 import java.util.Optional;
 
 public interface UserService {
 
-    Optional<Integer> logIn(String firstName, String lastName, String email);
+    Optional<Integer> logIn(Userr user);
 
-    Integer register(String firstName, String lastName, String email);
+    Integer register(Userr user);
 }

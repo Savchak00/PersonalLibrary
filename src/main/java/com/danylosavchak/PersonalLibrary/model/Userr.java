@@ -6,4 +6,8 @@ public interface Userr extends Person {
 
     Integer getUserId();
 
+    void setUserId(Integer userId);
+
+//    void setEmail(String email);
+
 }

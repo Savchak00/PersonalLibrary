@@ -3,6 +3,10 @@ package com.danylosavchak.PersonalLibrary.dao.impl;
 import com.danylosavchak.PersonalLibrary.dao.Dao;
 import com.danylosavchak.PersonalLibrary.model.Book;
 import com.danylosavchak.PersonalLibrary.model.Impl.BookImpl;
+import com.danylosavchak.PersonalLibrary.model.Impl.PersonImpl;
+import com.danylosavchak.PersonalLibrary.model.Impl.UserrImpl;
+import com.danylosavchak.PersonalLibrary.model.Person;
+import com.danylosavchak.PersonalLibrary.model.Userr;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -30,10 +34,19 @@ public class DaoImpl implements Dao {
 
     @Override
     public List<Book> getLibrary(Integer user_id) {
-        String query = "SELECT * FROM book WHERE owner_id = " + user_id + " AND date_of_removal IS NULL;";
+        String query = "SELECT b.book_id as book_id, b.title as title, b.isbn as isbn, b.date_of_addition as date_of_addition, b.plot as plot, b.num_of_full_reads as num_of_full_reads,\n" +
+                "       b.author_id as author_id, p.first_name as author_first_name, p.last_name as author_last_name,\n" +
+                "       u.person_id as user_person_id, b.owner_id as user_id, up.first_name as user_first_name,\n" +
+                "       up.last_name as user_last_name, u.email as email\n" +
+                "FROM book b\n" +
+                "    INNER JOIN userr u ON u.user_id = b.owner_id\n" +
+                "    INNER JOIN person p on b.author_id = p.person_id\n" +
+                "    INNER JOIN person up on u.person_id = up.person_id\n" +
+                "WHERE owner_id = ? AND date_of_removal IS NULL;";
         List<Book> library = new ArrayList<>();
         try {
             PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, user_id);
             stmt.execute();
             ResultSet resultSet = stmt.getResultSet();
             while (resultSet.next()) {
@@ -120,20 +133,20 @@ public class DaoImpl implements Dao {
 
 
     @Override
-    public Boolean addBook(String title, Integer authorId, String isbn, Date additionDate, String plot, Integer numberOfFullReads, Integer owner_id) {
+    public Boolean addBook(Book book) {
         String query = "INSERT INTO book(book_id, title, author_id, isbn, date_of_addition, date_of_removal, plot, num_of_full_reads, owner_id)\n" +
                 "VALUES ((SELECT MAX(book_id) + 1 FROM book), ?, ?, ?, ?, ?, ?, ?, ?);";
         int rowsCount = 0;
         try {
             PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setString(1, title);
-            stmt.setInt(2, authorId);
-            stmt.setString(3, isbn);
-            stmt.setDate(4, additionDate);
+            stmt.setString(1, book.getTitle());
+            stmt.setInt(2, book.getAuthor().getPersonId());
+            stmt.setString(3, book.getISBN());
+            stmt.setDate(4, book.getAdditionDate());
             stmt.setDate(5, null);
-            stmt.setString(6, plot);
-            stmt.setInt(7, numberOfFullReads);
-            stmt.setInt(8, owner_id);
+            stmt.setString(6, book.getPlot());
+            stmt.setInt(7, book.getNumberOfFullReads());
+            stmt.setInt(8, book.getOwner().getUserId());
             rowsCount = stmt.executeUpdate();
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "DaoImpl.addBook " + e.getMessage());
@@ -157,7 +170,15 @@ public class DaoImpl implements Dao {
 
     @Override
     public Optional<Book> getBook(Integer bookId) {
-        String query = "SELECT * FROM book WHERE book_id = ?;";
+        String query = "SELECT b.book_id as book_id, b.title as title, b.isbn as isbn, b.date_of_addition as date_of_addition, b.plot as plot, b.num_of_full_reads as num_of_full_reads,\n" +
+                "       b.author_id as author_id, p.first_name as author_first_name, p.last_name as author_last_name,\n" +
+                "       u.person_id as user_person_id, b.owner_id as user_id, up.first_name as user_first_name,\n" +
+                "       up.last_name as user_last_name, u.email as email\n" +
+                "FROM book b\n" +
+                "    INNER JOIN userr u ON u.user_id = b.owner_id\n" +
+                "    INNER JOIN person p on b.author_id = p.person_id\n" +
+                "    INNER JOIN person up on u.person_id = up.person_id\n" +
+                "WHERE book_id = ? AND date_of_removal IS NULL;";
         Optional<Book> book = Optional.empty();
         try {
             PreparedStatement stmt = connection.prepareStatement(query);
@@ -174,20 +195,19 @@ public class DaoImpl implements Dao {
     }
 
     @Override
-    public Boolean editBook(Integer bookId, String title, Integer authorId, String isbn,
-                         String plot, Integer numberOfFullReads) {
+    public Boolean editBook(Book book) {
         String query = "UPDATE book \n" +
                 "SET title = ?, isbn = ?, plot = ?, num_of_full_reads = ?, author_id = ? \n" +
                 "WHERE book_id = ?;";
         int rowsCount = 0;
         try {
             PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setString(1, title);
-            stmt.setString(2, isbn);
-            stmt.setString(3,plot);
-            stmt.setInt(4,numberOfFullReads);
-            stmt.setInt(5, authorId);
-            stmt.setInt(6, bookId);
+            stmt.setString(1, book.getTitle());
+            stmt.setString(2, book.getISBN());
+            stmt.setString(3, book.getPlot());
+            stmt.setInt(4, book.getNumberOfFullReads());
+            stmt.setInt(5, book.getAuthor().getPersonId());
+            stmt.setInt(6, book.getBookId());
             rowsCount = stmt.executeUpdate();
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "DaoImpl.editBook " + e.getMessage());
@@ -196,25 +216,33 @@ public class DaoImpl implements Dao {
     }
 
     private Book formABook(ResultSet resultSet) throws SQLException {
-        Integer book_id = resultSet.getInt("book_id");
+        Integer bookId = resultSet.getInt("book_id");
         String title = resultSet.getString("title");
-        Integer author_id = resultSet.getInt("author_id");
+        Integer authorId = resultSet.getInt("author_id");
+        String authorFirstName = resultSet.getString("author_first_name");
+        String authorLastName = resultSet.getString("author_last_name");
         String isbn = resultSet.getString("isbn");
         Date additionDate = resultSet.getDate("date_of_addition");
-        Date removalDate = resultSet.getDate("date_of_removal");
         String plot = resultSet.getString("plot");
         Integer numberOfFullReads = resultSet.getInt("num_of_full_reads");
-        Integer owner_id = resultSet.getInt("owner_id");
+        Integer ownerId = resultSet.getInt("user_id");
+        String ownerEmail = resultSet.getString("email");
+        String ownerFirstName = resultSet.getString("user_first_name");
+        String ownerLastName = resultSet.getString("user_last_name");
+        Integer ownerPersonId = resultSet.getInt("user_person_id");
 
-        Book book = new BookImpl(book_id,
+        PersonImpl author = new PersonImpl(authorId, authorFirstName, authorLastName);
+        PersonImpl ownerPerson = new PersonImpl(ownerPersonId, ownerFirstName, ownerLastName);
+        UserrImpl owner = new UserrImpl(ownerPerson, ownerEmail, ownerId);
+        Book book = new BookImpl(bookId,
                 title,
-                author_id,
+                author,
                 isbn,
                 additionDate,
-                removalDate,
+                null,
                 plot,
                 numberOfFullReads,
-                owner_id);
+                owner);
         return book;
     }
 
