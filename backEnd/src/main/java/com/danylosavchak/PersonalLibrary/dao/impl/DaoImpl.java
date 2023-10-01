@@ -212,6 +212,25 @@ public class DaoImpl implements Dao {
         return rowsCount > 0;
     }
 
+    @Override
+    public Optional<Integer> getUserId(Integer personId, String email) {
+        String query = "SELECT user_id FROM userr WHERE person_id = ? AND email = ?;";
+        Optional<Integer> userId = Optional.empty();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, personId);
+            stmt.setString(2, email);
+            stmt.execute();
+            ResultSet resultSet = stmt.getResultSet();
+            if (resultSet.next()) {
+                userId = Optional.of(resultSet.getInt("user_id"));
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "DaoImpl.getUserId " + e.getMessage());
+        }
+        return userId;
+    }
+
     private Book formABook(ResultSet resultSet) throws SQLException {
         Integer bookId = resultSet.getInt("book_id");
         String title = resultSet.getString("title");
@@ -241,24 +260,5 @@ public class DaoImpl implements Dao {
                 numberOfFullReads,
                 owner);
         return book;
-    }
-
-    @Override
-    public Optional<Integer> getUserId(Integer personId, String email) {
-        String query = "SELECT user_id FROM userr WHERE person_id = ? AND email = ?;";
-        Optional<Integer> userId = Optional.empty();
-        try {
-            PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setInt(1, personId);
-            stmt.setString(2, email);
-            stmt.execute();
-            ResultSet resultSet = stmt.getResultSet();
-            if (resultSet.next()) {
-                userId = Optional.of(resultSet.getInt("user_id"));
-            }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "DaoImpl.getUserId " + e.getMessage());
-        }
-        return userId;
     }
 }
