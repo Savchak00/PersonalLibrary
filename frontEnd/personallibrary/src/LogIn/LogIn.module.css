@@ -1,10 +1,19 @@
+body,
+html {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 .LogIn {
     margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    width: fit-content;
 
 }
 
@@ -27,10 +36,11 @@
 .InputDiv {
     margin-top: 60px;
     flex-shrink: 0;
+    flex-direction: column;
+    display: flex;
 }
 
 .Button {
-    display: inline-flex;
     padding: 16px 60px;
     margin-top: 30px;
     justify-content: center;
@@ -63,4 +73,12 @@
 
 img:hover {
     transform: scale(1.05);
+}
+
+.Input,
+.Button,
+img {
+  transition-property: transform, background-color, color;
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
 }
