@@ -1,11 +1,7 @@
 .Library {
     margin: 0;
     width: fit-content;
-}
-
-.body {
-    align-items: baseline;
-    display: flex;
+    height: fit-content;
 }
 
 .Logo {
