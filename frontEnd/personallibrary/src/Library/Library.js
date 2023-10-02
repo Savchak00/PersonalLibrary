@@ -1,43 +1,51 @@
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
 import styles from './Library.module.css';
 import {LibraryBook} from './LibraryBook/LibraryBook';
 import logo from '../logo.svg';
+import Flickity from 'react-flickity-component';
+import './flikity.css'
 
 export const Library = (props) => {
 
     const buttonClicked = () => {
     
     };
-
-    const responsive = {
-        superLargeDesktop: {
-          breakpoint: { max: 4000, min: 3000 },
-          items: 5
-        },
-        desktop: {
-          breakpoint: { max: 3000, min: 1024 },
-          items: 3
-        },
-        tablet: {
-          breakpoint: { max: 1024, min: 464 },
-          items: 2
-        },
-        mobile: {
-          breakpoint: { max: 464, min: 0 },
-          items: 1
-        }
-    };
+  
+    const flickityOptions = {
+      initialIndex: 2,
+      groupCells: 2
+    }
 
     return (
         <div className={styles.Library}>
-            <img src={logo} className={styles.Logo} alt="Logo" />
+        <img src={logo} className={styles.LogoLibrary} alt="Logo" />
             <div className={styles.ListOfBooks}>
-                    <LibraryBook text="Clean Code" color="#A97AF6" angle={-5}/>
-                    <LibraryBook text="Clean Architecture" color="#7ABBF6" angle={5}/>
-                    <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
-                    <LibraryBook text="Clean Code" color="#21A61E" angle={2}/>
-                    <LibraryBook text="Clean Code" color="#847AF6" angle={-2}/>
+              <Flickity className={'carousel'} elementType={'div'} options={flickityOptions} disableImagesLoaded={false} reloadOnUpdate static >
+                <LibraryBook text="Clean Code" color="#A97AF6" angle={-5}/>
+                <LibraryBook text="Clean Architecture" color="#7ABBF6" angle={5}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+                <LibraryBook text="Essays" color="#F67A7A" angle={0}/>
+
+              </Flickity>
+            </div>
+            <div>
+
             </div>
             <button className={styles.Button} onClick={buttonClicked} >Add</button>
         </div>

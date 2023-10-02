@@ -15,7 +15,7 @@ function App() {
           <Route path = '/book' element={<Book/>}/>
         </Routes>
       </BrowserRouter>
-      <div className={styles.readYourBook}>Read your book</div>
+      {/* <div className={styles.readYourBook}>Read your book</div> */}
     </div>
   );
 };

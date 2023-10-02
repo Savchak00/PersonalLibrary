@@ -1,27 +1,31 @@
 .Library {
     margin: 0;
-    width: fit-content;
-    height: fit-content;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+
 }
 
-.Logo {
-    width: 25%;
+.LogoLibrary {
     margin-top: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 180px;
 }
 
 .ListOfBooks {
-    display: flex;
-    align-items: center;
-    gap: 10px;
     padding-top: 108px;
+    width: 60%;
+    margin: auto;
     
 }
 
 .Button {
-    display: inline-flex;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     padding: 10px 60px;
-    justify-content: center;
-    align-items: center;
     gap: 10px;
     border-radius: 5px;
     background: #FFB800;

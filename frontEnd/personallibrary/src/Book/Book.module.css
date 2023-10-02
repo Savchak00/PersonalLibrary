@@ -1,4 +1,4 @@
-.Logo {
+.LogoBook {
     width: 180px;
     margin-top: 100px;
 
@@ -44,8 +44,20 @@
     font-weight: 700;
     line-height: normal;
     font-family: inherit;
+    margin:0;
 }
 
+.PlusMinusButton {
+    background: none;
+    border: none;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    font-family: inherit;
+    margin:0;
+    margin-left: 16px;
+}
 .InfoBlock {
     display: flex;
     margin-top: 60px;
@@ -78,7 +90,15 @@
     transform: scale(1.05);
 }
 
-.Button {
+.PlusMinusButton:hover {
+    transform: scale(1.5);
+}
+
+.PlusMinusButton:active {
+    transform: scale(1.5);
+}
+
+.Button, .PlusMinusButton {
   transition-property: transform, background-color, color;
   transition-duration: 0.3s;
   transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
