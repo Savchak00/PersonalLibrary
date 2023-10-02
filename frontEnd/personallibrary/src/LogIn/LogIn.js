@@ -2,11 +2,13 @@ import styles from './LogIn.module.css';
 import {useState} from 'react';
 import logo from '../logo.svg'
 import Axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const LogIn = (props) => {
     const [name,setName] = useState("");
     const [surName,setSurName] = useState("");
     const [email,setEmail] = useState("");
+    let navigate = useNavigate(); 
     
     const handleChangeName = (event) => {
         setName(event.target.value);
@@ -32,6 +34,7 @@ export const LogIn = (props) => {
             .then((response) => {
                 sessionStorage.setItem("userId", response.data["responseData"]["userId"]);
                 // console.log(sessionStorage.getItem("userId"));
+                navigate('library');
             });
         }
     };
