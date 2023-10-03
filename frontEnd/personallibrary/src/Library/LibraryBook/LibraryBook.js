@@ -17,7 +17,7 @@ export const LibraryBook = (props) => {
     };
 
     const buttonClicked = () => {
-        navigate('/book');
+        navigate('/book', {state: {"bookId" : book.bookId}});
     };
 
     return (

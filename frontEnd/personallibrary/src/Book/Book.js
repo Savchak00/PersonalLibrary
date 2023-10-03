@@ -5,7 +5,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import {useEffect} from 'react';
 import Axios from "axios";
 import {useState} from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { SpinnerDiamond } from 'spinners-react';
 
 export const Book = (props) => {
@@ -18,6 +18,7 @@ export const Book = (props) => {
     const [additionDate, setAdditionDate] = useState(null);
     const [bookId, setBookId] = useState(-1);
     let navigate = useNavigate(); 
+    const location = useLocation();
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -28,7 +29,7 @@ export const Book = (props) => {
     },[]);
 
     const fetchBook = () => {
-        Axios.get("http://172.20.10.8:8080/api/book/1", {
+        Axios.get(`http://172.20.10.8:8080/api/book/${location.state.bookId}`, {
         })
         .then((response) => {
             let book = response.data["responseData"]["book"];
