@@ -6,6 +6,7 @@ import {useEffect} from 'react';
 import Axios from "axios";
 import {useState} from 'react';
 import { useNavigate } from "react-router-dom";
+import { SpinnerDiamond } from 'spinners-react';
 
 export const Book = (props) => {
     const [title,setTitle] = useState("");
@@ -18,8 +19,12 @@ export const Book = (props) => {
     const [bookId, setBookId] = useState(-1);
     let navigate = useNavigate(); 
 
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
+        setIsLoading(true);
         fetchBook();
+        setIsLoading(false);
     },[]);
 
     const fetchBook = () => {
@@ -96,6 +101,7 @@ export const Book = (props) => {
 
     return (
         <div>
+            {isLoading ? (<SpinnerDiamond className={styles.Spinner}/>) : <div>
             <div style={{textAlign:'center'}}>
                 <button style={{border:"none", background:"none"}} onClick={returnToLibrary}><img src={logo} className={`${styles.LogoBook} ${styles.Image}`} alt="Logo"/></button>
             </div>
@@ -144,6 +150,7 @@ export const Book = (props) => {
             <div style={{textAlign:"center"}}>
                 <button className={styles.Button} onClick={saveButtonClicked} >Save</button>
             </div>
+            </div> }
         </div>
     );
 };

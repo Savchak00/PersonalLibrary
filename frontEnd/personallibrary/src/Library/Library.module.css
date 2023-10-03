@@ -38,6 +38,12 @@
     margin-top: 60px;
 }
 
+.Spinner {
+    display: block;
+    margin: auto;
+    margin-top: 25%;
+}
+
 
 .LogoLibrary:hover, .Button:hover {
     transform: scale(1.05);

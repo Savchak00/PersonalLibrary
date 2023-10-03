@@ -5,12 +5,16 @@ import Flickity from 'react-flickity-component';
 import './flikity.css'
 import {useEffect, useState} from 'react';
 import Axios from "axios";
+import { SpinnerDiamond } from 'spinners-react';
 
 export const Library = (props) => {
     const [library, setLibrary] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+      setIsLoading(true);
       fetchLibrary();
+      setIsLoading(false);
     },[]);
 
     const fetchLibrary = () => {
@@ -34,19 +38,21 @@ export const Library = (props) => {
 
     return (
         <div className={styles.Library}>
-        <img src={logo} className={styles.LogoLibrary} alt="Logo" />
-            <div className={styles.ListOfBooks}>
-              <Flickity className={'carousel'} elementType={'div'} options={flickityOptions} disableImagesLoaded={false} reloadOnUpdate static >
-              {library.map((book, index) => (
-                <LibraryBook
-                  key={index}
-                  book={book}
-                />
-              ))}
-              </Flickity>
-              
-            </div>
-            <button className={styles.Button} onClick={buttonClicked} >Add</button>
+            {isLoading ? (<SpinnerDiamond className={styles.Spinner}/>) :
+          (<div>
+                <img src={logo} className={styles.LogoLibrary} alt="Logo" />
+                <div className={styles.ListOfBooks}>
+                  <Flickity className={'carousel'} elementType={'div'} options={flickityOptions} disableImagesLoaded={false} reloadOnUpdate static >
+                  {library.map((book, index) => (
+                    <LibraryBook
+                      key={index}
+                      book={book}
+                    />
+                  ))}
+                  </Flickity>
+                </div>
+                <button className={styles.Button} onClick={buttonClicked} >Add</button>
+            </div>)}
         </div>
     );
 };
