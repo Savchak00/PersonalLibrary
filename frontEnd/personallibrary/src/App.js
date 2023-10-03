@@ -17,7 +17,6 @@ function App() {
           <Route path = '/library/addBook' element={<AddBook/>}/>
         </Routes>
       </BrowserRouter>
-      <div className={styles.readYourBook}>Read your book</div>
     </div>
   );
 };

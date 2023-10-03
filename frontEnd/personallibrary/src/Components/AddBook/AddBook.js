@@ -15,7 +15,7 @@ export const AddBook = (props) => {
     const [isbn,setISBN] = useState("");
     const [plot,setPlot] = useState("");
     const [numberOfFullReads,setNumberOfFullReads] = useState(0);
-    const [additionDate, setAdditionDate] = useState(new Date().toJSON().slice(0, 10));
+    const [additionDate, _] = useState(new Date().toJSON().slice(0, 10));
     let navigate = useNavigate(); 
     const location = useLocation();
 
@@ -27,6 +27,7 @@ export const AddBook = (props) => {
         } else if (title == "" || authorFirstName == "" || authorLastName == "" || plot == "") {
             alert("Fields shouldn't be empty!")
         } else {
+            setIsLoading(true);
             Axios.post("http://172.20.10.8:8080/api/library/addBook", {
                 "title" : title,
                 "isbn" : isbn,
@@ -49,6 +50,7 @@ export const AddBook = (props) => {
             }).catch((error) => {
                 alert("Something is wrong. " + error);
             }); 
+            setIsLoading(false);
             navigate("/library");
         }
     }

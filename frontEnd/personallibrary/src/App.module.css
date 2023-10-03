@@ -36,15 +36,3 @@
     transform: rotate(360deg);
   }
 }
-
-
-.readYourBook {
-  position: absolute;
-  bottom: 7.5%;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
