@@ -29,7 +29,7 @@
     transform: rotate("5deg");
 }
 
-.Book:hover, button:hover {
+.Book:hover, button:hover, .cont:hover {
     transform: rotate("5deg");
 }
 

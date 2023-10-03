@@ -6,10 +6,12 @@ import './flikity.css'
 import {useEffect, useState} from 'react';
 import Axios from "axios";
 import { SpinnerDiamond } from 'spinners-react';
+import { useNavigate } from "react-router-dom";
 
 export const Library = (props) => {
     const [library, setLibrary] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    let navigate = useNavigate(); 
 
     useEffect(() => {
       setIsLoading(true);
@@ -28,7 +30,7 @@ export const Library = (props) => {
   };
 
     const buttonClicked = () => {
-    
+      navigate("addBook");
     };
   
     const flickityOptions = {
@@ -42,7 +44,7 @@ export const Library = (props) => {
           (<div>
                 <img src={logo} className={styles.LogoLibrary} alt="Logo" />
                 <div className={styles.ListOfBooks}>
-                  <Flickity className={'carousel'} elementType={'div'} options={flickityOptions} disableImagesLoaded={false} reloadOnUpdate static >
+                  <Flickity className={`carousel`} options={flickityOptions} disableImagesLoaded={false} reloadOnUpdate static >
                   {library.map((book, index) => (
                     <LibraryBook
                       key={index}
