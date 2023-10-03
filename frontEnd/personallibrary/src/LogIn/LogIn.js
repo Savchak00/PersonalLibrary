@@ -33,7 +33,6 @@ export const LogIn = (props) => {
             })
             .then((response) => {
                 sessionStorage.setItem("userId", response.data["responseData"]["userId"]);
-                // console.log(sessionStorage.getItem("userId"));
                 navigate('library');
             });
         }
@@ -41,13 +40,13 @@ export const LogIn = (props) => {
 
     return (
         <div className={styles.LogIn}>
-            <img src={logo} alt="Logo" />
+            <img className={`${styles.CenterBlock} ${styles.LogInLogo} ${styles.Image}`} src={logo} alt="Logo" />
             <div className={styles.InputDiv}>
                 <input className={styles.Input} onChange={handleChangeName} placeholder='Name' style={{backgroundColor:"#DAC9F5"}}/>
                 <input className={styles.Input} onChange={handleChangeSurName} placeholder='Surname' style={{backgroundColor:"#FEF1CF"}}/>
                 <input className={styles.Input} onChange={handleChangeEmail} placeholder='Email' style={{backgroundColor:"#D7FFD7"}}/>
             </div>
-            <button className={styles.Button} onClick={buttonClicked} >Log In</button>
+            <button className={`${styles.Button} ${styles.CenterBlock}`} onClick={buttonClicked} >Log In</button>
         </div>
     );
 };

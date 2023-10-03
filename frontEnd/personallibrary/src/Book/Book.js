@@ -5,14 +5,18 @@ import TextareaAutosize from 'react-textarea-autosize';
 import {useEffect} from 'react';
 import Axios from "axios";
 import {useState} from 'react';
+import { useNavigate } from "react-router-dom";
 
 export const Book = (props) => {
     const [title,setTitle] = useState("");
-    const [author,setAuthor] = useState("");
+    const [authorFirstName,setAuthorFirstName] = useState("");
+    const [authorLastName,setAuthorLastName] = useState("");
     const [isbn,setISBN] = useState("");
     const [plot,setPlot] = useState("");
     const [numberOfFullReads,setNumberOfFullReads] = useState(0);
     const [additionDate, setAdditionDate] = useState(null);
+    const [bookId, setBookId] = useState(-1);
+    let navigate = useNavigate(); 
 
     useEffect(() => {
         fetchBook();
@@ -24,16 +28,37 @@ export const Book = (props) => {
         .then((response) => {
             let book = response.data["responseData"]["book"];
             setTitle(book["title"]);
-            setAuthor(book["author"]["firstName"] + " " + book["author"]["lastName"]);
+            setAuthorFirstName(book["author"]["firstName"]);
+            setAuthorLastName(book["author"]["lastName"]);
             setISBN(book["isbn"]);
             setPlot(book["plot"]);
             setNumberOfFullReads(book["numberOfFullReads"]);
             setAdditionDate(book["additionDate"]);
+            setBookId(book["bookId"])
         });
     };
 
     const saveButtonClicked = () => {
-        // post date 
+        Axios.put("http://172.20.10.8:8080/api/book/edit", {
+            "title" : title,
+            "isbn" : isbn,
+            "additionDate" : additionDate,
+            "plot" : plot,
+            "numberOfFullReads": numberOfFullReads,
+            "bookId": bookId,
+            "author" : {
+                "firstName" : authorFirstName,
+                "lastName" : authorLastName
+            }
+        }).then((res) => {
+            if (res.data["responseData"]["isBookEdited"] == true) {
+                alert("Book is changed");
+            } else {
+                alert("Something is wrong. Information is not saved (");
+            }
+        }).catch((error) => {
+            alert("Something is wrong. " + error);
+        }); 
     }
 
     const increaseNumberOfFullReads = () => {
@@ -44,25 +69,51 @@ export const Book = (props) => {
         setNumberOfFullReads(numberOfFullReads - 1);
     }   
 
+    const changeTitle = (event) => {
+        setTitle(event.target.value);
+    }
+
+    const changeAuthorFirstName = (event) => {
+        setAuthorFirstName(event.target.value);
+    }
+
+    const changeAuthorLastName = (event) => {
+        setAuthorLastName(event.target.value);
+    }
+
+    const changeISBN = (event) => {
+        setISBN(event.target.value);
+    }
+
+    const changePlot = (event) => {
+        setPlot(event.target.value);
+    }
+
+    const returnToLibrary = () => {
+        navigate('/library');
+        console.log("aaa");
+    }
+
     return (
         <div>
             <div style={{textAlign:'center'}}>
-                <img src={logo} className={styles.LogoBook} alt="Logo" />
+                <button style={{border:"none", background:"none"}} onClick={returnToLibrary}><img src={logo} className={`${styles.LogoBook} ${styles.Image}`} alt="Logo"/></button>
             </div>
             <div style={{textAlign:'center'}}>
-                <img src={photo} className={styles.Photo} alt="Books"/>
+                <img src={photo} className={`${styles.width80Perc} ${styles.Photo}`} alt="Books"/>
             </div>
-            <div style={{textAlign:'start'}}>
-                <input className={styles.Title} defaultValue={title}/>
+            <div className= {`${styles.CenterBlockHorizontally} ${styles.width80Perc}`} style={{textAlign:'start'}}>
+                <input className={styles.Title} defaultValue={title} onChange={changeTitle}/>
             </div>
             <div className={styles.InfoBlock}>
                 <div style={{width:"25%"}}>
                     <div id='vertical row'>
                         <div>
                             <p style={{padding:0, margin:0}}>Author:</p>
-                            <input className={styles.Author} defaultValue={author}/>
+                            <input className={styles.Author} defaultValue={authorFirstName} onChange={changeAuthorFirstName}/>
+                            <input className={styles.Author} defaultValue={authorLastName} onChange={changeAuthorLastName}/>
                         </div>
-                        <div style={{marginTop:"40px"}}>
+                        <div style={{marginTop:"11px"}}>
                             <p style={{padding:0, margin:0}}>Addition date:</p>
                             <p className={styles.Author}>{additionDate}</p>
 
@@ -73,7 +124,7 @@ export const Book = (props) => {
                     <div id='vertical row'>
                         <div>
                             <p style={{padding:0, margin:0}}>ISBN:</p>
-                            <input className={styles.Author} defaultValue={isbn}/>
+                            <input className={styles.Author} defaultValue={isbn} onChange={changeISBN}/>
                         </div>
                         <div style={{marginTop:"40px"}}>
                             <p style={{padding:0, margin:0}}>Number of full reads:</p>
@@ -87,7 +138,7 @@ export const Book = (props) => {
                 </div>
                 <div id='plot' style={{width:"50%"}}>
                     <p style={{padding:0, margin:0}}>Plot:</p>
-                    <TextareaAutosize className={styles.Plot} defaultValue={plot}/>
+                    <TextareaAutosize className={styles.Plot} defaultValue={plot} onChange={changePlot}/>
                 </div>
             </div>
             <div style={{textAlign:"center"}}>

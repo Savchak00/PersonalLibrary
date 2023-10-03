@@ -1,19 +1,14 @@
-/* body, */
-/* html {
-  height: 100%;
-  margin: 0;
-} */
-
-/* body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} */
-
-
 .LogIn {
-    margin: 0;
     width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 300px;
+}
+
+.CenterBlock {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .Input {
@@ -70,13 +65,13 @@
     transform: scale(1.05);
 }
 
-img:hover {
+.Image:hover {
     transform: scale(1.05);
 }
 
 .Input,
 .Button,
-img {
+.Image {
   transition-property: transform, background-color, color;
   transition-duration: 0.3s;
   transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
