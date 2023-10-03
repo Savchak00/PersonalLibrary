@@ -1,6 +1,6 @@
-import styles from './Book.module.css';
-import logo from '../logo.svg';
-import photo from '../booksPhoto.jpeg';
+import styles from './AddBook.module.css';
+import logo from '../../logo.svg';
+import photo from '../../booksPhoto.jpeg';
 import TextareaAutosize from 'react-textarea-autosize';
 import {useEffect} from 'react';
 import Axios from "axios";
@@ -8,76 +8,49 @@ import {useState} from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 import { SpinnerDiamond } from 'spinners-react';
 
-export const Book = (props) => {
+export const AddBook = (props) => {
     const [title,setTitle] = useState("");
     const [authorFirstName,setAuthorFirstName] = useState("");
     const [authorLastName,setAuthorLastName] = useState("");
     const [isbn,setISBN] = useState("");
     const [plot,setPlot] = useState("");
     const [numberOfFullReads,setNumberOfFullReads] = useState(0);
-    const [additionDate, setAdditionDate] = useState(null);
-    const [bookId, setBookId] = useState(-1);
+    const [additionDate, setAdditionDate] = useState(new Date().toJSON().slice(0, 10));
     let navigate = useNavigate(); 
     const location = useLocation();
 
     const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-        setIsLoading(true);
-        fetchBook();
-        setIsLoading(false);
-    },[]);
-
-    const fetchBook = () => {
-        Axios.get(`http://172.20.10.8:8080/api/book/${location.state.bookId}`, {
-        })
-        .then((response) => {
-            let book = response.data["responseData"]["book"];
-            setTitle(book["title"]);
-            setAuthorFirstName(book["author"]["firstName"]);
-            setAuthorLastName(book["author"]["lastName"]);
-            setISBN(book["isbn"]);
-            setPlot(book["plot"]);
-            setNumberOfFullReads(book["numberOfFullReads"]);
-            setAdditionDate(book["additionDate"]);
-            setBookId(book["bookId"])
-        });
-    };
-
-    const saveButtonClicked = () => {
-        Axios.put("http://172.20.10.8:8080/api/book/edit", {
-            "title" : title,
-            "isbn" : isbn,
-            "additionDate" : additionDate,
-            "plot" : plot,
-            "numberOfFullReads": numberOfFullReads,
-            "bookId": bookId,
-            "author" : {
-                "firstName" : authorFirstName,
-                "lastName" : authorLastName
-            }
-        }).then((res) => {
-            if (res.data["responseData"]["isBookEdited"]) {
-                alert("Book is changed");
-            } else {
-                alert("Something is wrong. Information is not saved (");
-            }
-        }).catch((error) => {
-            alert("Something is wrong. " + error);
-        }); 
-    }
-
-    const removeButtonClicked = () => {
-        Axios.put(`http://172.20.10.8:8080/api/library/removeBook/${location.state.bookId}`).then((res) => {
-            if (res.data["responseData"]["isBookRemoved"]) {
-                alert("Book is removed");
-                navigate("../library");
-            } else {
-                alert("Something is wrong. Book is not removed.");
-            }
-        }).catch((error) => {
-            alert("Something is wrong. " + error);
-        }); 
+    const addButtonClicked = () => {
+        if (!validateISBN(isbn)) {
+            alert("Isbn should be specific format!")
+        } else if (title == "" || authorFirstName == "" || authorLastName == "" || plot == "") {
+            alert("Fields shouldn't be empty!")
+        } else {
+            Axios.post("http://172.20.10.8:8080/api/library/addBook", {
+                "title" : title,
+                "isbn" : isbn,
+                "additionDate" : additionDate,
+                "plot" : plot,
+                "numberOfFullReads": numberOfFullReads,
+                "author" : {
+                    "firstName" : authorFirstName,
+                    "lastName" : authorLastName
+                },
+                "owner" : {
+                    "userId" :  sessionStorage.getItem("userId")
+                }
+            }).then((res) => {
+                if (res.data["responseData"]["isBookAdded"]) {
+                    alert(res.data["message"]);
+                } else {
+                    alert("Something is wrong. Information is not saved (");
+                }
+            }).catch((error) => {
+                alert("Something is wrong. " + error);
+            }); 
+            navigate("/library");
+        }
     }
 
     const increaseNumberOfFullReads = () => {
@@ -87,7 +60,7 @@ export const Book = (props) => {
     const decreaseNumberOfFullReads = () => {
         if (numberOfFullReads > 0) {
             setNumberOfFullReads(numberOfFullReads - 1);
-        };
+        }
     }   
 
     const changeTitle = (event) => {
@@ -115,6 +88,12 @@ export const Book = (props) => {
         console.log("aaa");
     }
 
+    const validateISBN = (isbn) => {
+        const isbnRegex = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/;
+    
+        return isbnRegex.test(isbn);
+    };
+
     return (
         <div>
             {isLoading ? (<SpinnerDiamond className={styles.Spinner}/>) : <div>
@@ -125,15 +104,15 @@ export const Book = (props) => {
                 <img src={photo} className={`${styles.width80Perc} ${styles.Photo}`} alt="Books"/>
             </div>
             <div className= {`${styles.CenterBlockHorizontally} ${styles.width80Perc}`} style={{textAlign:'start'}}>
-                <input className={styles.Title} defaultValue={title} onChange={changeTitle}/>
+                <input className={styles.Title} placeholder="Title" onChange={changeTitle} />
             </div>
             <div className={styles.InfoBlock}>
                 <div style={{width:"25%"}}>
                     <div id='vertical row'>
                         <div>
                             <p style={{padding:0, margin:0}}>Author:</p>
-                            <input className={styles.Author} defaultValue={authorFirstName} onChange={changeAuthorFirstName}/>
-                            <input className={styles.Author} defaultValue={authorLastName} onChange={changeAuthorLastName}/>
+                            <input className={styles.Author} placeholder="First Name" onChange={changeAuthorFirstName}/>
+                            <input className={styles.Author} placeholder="Last Name" onChange={changeAuthorLastName}/>
                         </div>
                         <div style={{marginTop:"11px"}}>
                             <p style={{padding:0, margin:0}}>Addition date:</p>
@@ -146,7 +125,7 @@ export const Book = (props) => {
                     <div id='vertical row'>
                         <div>
                             <p style={{padding:0, margin:0}}>ISBN:</p>
-                            <input className={styles.Author} defaultValue={isbn} onChange={changeISBN}/>
+                            <input className={styles.Author} placeholder="isbn" onChange={changeISBN}/>
                         </div>
                         <div style={{marginTop:"40px"}}>
                             <p style={{padding:0, margin:0}}>Number of full reads:</p>
@@ -160,12 +139,11 @@ export const Book = (props) => {
                 </div>
                 <div id='plot' style={{width:"50%"}}>
                     <p style={{padding:0, margin:0}}>Plot:</p>
-                    <TextareaAutosize className={styles.Plot} defaultValue={plot} onChange={changePlot}/>
+                    <TextareaAutosize className={styles.Plot} placeholder="Plot" onChange={changePlot}/>
                 </div>
             </div>
             <div style={{textAlign:"center"}}>
-                <button className={styles.Button} onClick={saveButtonClicked} >Save</button>
-                <button className={styles.Button} style={{background:"#F67A7A"}} onClick={removeButtonClicked} >Remove</button>
+                <button className={styles.Button} onClick={addButtonClicked} >Add</button>
             </div>
             </div> }
         </div>

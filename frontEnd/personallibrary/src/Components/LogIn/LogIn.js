@@ -1,6 +1,6 @@
 import styles from './LogIn.module.css';
 import {useState} from 'react';
-import logo from '../logo.svg'
+import logo from '../../logo.svg'
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -22,8 +22,16 @@ export const LogIn = (props) => {
         setEmail(event.target.value);
     };
 
+    const validateEmail = (email) => {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    
+        return emailRegex.test(email);
+    };
+
     const buttonClicked = () => {
-        if (name == "" || surName == "" || email == "") {
+        if (!validateEmail(email)) {
+            alert("Email should be in a specific format!");
+        } else if (name == "" || surName == "") {
             alert("Fields cannot be empty");
         } else {
             Axios.post("http://172.20.10.8:8080/api/logIn/logInOrCreate", {

@@ -50,7 +50,7 @@ public class LibraryController {
     public ResponseEntity<Object> removeBook(@PathVariable("bookId") Integer bookId) {
         Boolean isBookRemoved =  this.service.removeBook(bookId);
         Map<String, Boolean> responseMap = new HashMap<>();
-        responseMap.put("isBookAdded", isBookRemoved);
+        responseMap.put("isBookRemoved", isBookRemoved);
         if (isBookRemoved) {
             return ResponseHandler.responseBuilder("Book is removed from the library.",
                     HttpStatus.OK, responseMap);

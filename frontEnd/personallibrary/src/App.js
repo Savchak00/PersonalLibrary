@@ -1,9 +1,9 @@
 import styles from './App.module.css';
-import { LogIn } from './LogIn/LogIn';
-import {Library} from './Library/Library';
-import {Book} from './Book/Book'
+import { LogIn } from './Components/LogIn/LogIn';
+import {Library} from './Components/Library/Library';
+import {Book} from './Components/Book/Book'
 import {Route, Routes, BrowserRouter} from 'react-router-dom';
-import {AddBook} from './AddBook/AddBook';
+import {AddBook} from './Components/AddBook/AddBook';
 
 function App() {
 

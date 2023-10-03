@@ -1,6 +1,6 @@
 import styles from './Library.module.css';
 import {LibraryBook} from './LibraryBook/LibraryBook';
-import logo from '../logo.svg';
+import logo from '../../logo.svg';
 import Flickity from 'react-flickity-component';
 import './flikity.css'
 import {useEffect, useState} from 'react';
