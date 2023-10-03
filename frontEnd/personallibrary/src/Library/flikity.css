@@ -23,7 +23,6 @@
   
   .flickity-enabled.is-draggable {
     -webkit-tap-highlight-color: transparent;
-    tap-highlight-color: transparent;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -142,3 +141,21 @@
     opacity: 1;
   }
   
+
+  /* no circle */
+.flickity-button {
+  background: transparent;
+}
+/* big previous & next buttons */
+.flickity-prev-next-button {
+  width: 50px;
+  height: 50px;
+}
+/* icon color */
+.flickity-button-icon {
+  fill: black;
+}
+/* hide disabled button */
+.flickity-button:disabled {
+  display: none;
+}

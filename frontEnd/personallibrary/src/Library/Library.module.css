@@ -35,5 +35,24 @@
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    margin-top: 40px;
+    margin-top: 60px;
+}
+
+
+.LogoLibrary:hover, .Button:hover {
+    transform: scale(1.05);
+}
+
+.Button:active {
+    background-color: #72550C; 
+    color: white;
+    transform: scale(1.05);
+}
+
+.Input,
+.Button,
+.LogoLibrary {
+  transition-property: transform, background-color, color;
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
 }
