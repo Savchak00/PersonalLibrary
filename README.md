@@ -21,6 +21,7 @@ This full-stack web application utilizes various technologies:
 ### Backend
 - Java 8
 - Spring Boot
+- Maven
 
 ### Database
 - PostgreSQL
